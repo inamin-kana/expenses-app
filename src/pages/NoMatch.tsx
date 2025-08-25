@@ -3,7 +3,7 @@ import React from 'react'
 const NoMatch = () => {
   return (
     <div>
-      このページはありません。
+      No esxiste esta página.
     </div>
   )
 }
