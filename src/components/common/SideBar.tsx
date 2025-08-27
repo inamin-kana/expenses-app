@@ -64,7 +64,7 @@ const SideBar = ({drawerWidth, mobileOpen, handleDrawerTransitionEnd, handleDraw
   return (
     <Box
       component="nav"
-      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
       aria-label="mailbox folders"
     >
       {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
@@ -74,7 +74,7 @@ const SideBar = ({drawerWidth, mobileOpen, handleDrawerTransitionEnd, handleDraw
         onTransitionEnd={handleDrawerTransitionEnd}
         onClose={handleDrawerClose}
         sx={{
-          display: { xs: 'block', sm: 'none' },
+          display: { xs: 'block', md: 'none' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
         }}
         slotProps={{
@@ -88,7 +88,7 @@ const SideBar = ({drawerWidth, mobileOpen, handleDrawerTransitionEnd, handleDraw
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: 'none', sm: 'block' },
+          display: { xs: 'none', md: 'block' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
         }}
         open
