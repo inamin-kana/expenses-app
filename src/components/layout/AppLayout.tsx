@@ -71,6 +71,7 @@ export default function AppLayout() {
         sx={{ flexGrow: 1, p: 3, width: { md: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Toolbar />
+        
         <Outlet />
       </Box>
     </Box>

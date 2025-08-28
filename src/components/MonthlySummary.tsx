@@ -3,8 +3,20 @@ import React from 'react'
 import SouthIcon from '@mui/icons-material/South';
 import NorthIcon from '@mui/icons-material/North';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import { Transaction } from '../types'
+import { financeCalculations } from '../utils/financeCalculations';
 
-const MonthlySummary = () => {
+interface MonthlySummaryProps {
+  monthlyTransactions: Transaction[],
+}
+
+const MonthlySummary = ({monthlyTransactions}: MonthlySummaryProps) => {
+  console.log(monthlyTransactions);
+  
+  const {income, expense, balance} = financeCalculations(monthlyTransactions);
+  // const monthlyTotals = financeCalculations(monthlyTransactions);
+  // console.log(monthlyTotals);
+  
   return (
     <Grid container spacing={{xs: 1, sm: 2}} mb={2}>
       {/* Income */}
@@ -26,7 +38,7 @@ const MonthlySummary = () => {
             textAlign={"right"} 
             fontWeight={"fontWeightBold"}
             sx={{wordBreak: "break-word", fontSize: {xs: ".8rem", sm: "1rem", md: "1.2rem" }} }
-            >30€</Typography>
+            >{income}€</Typography>
           </CardContent>
         </Card>
       </Grid>
@@ -49,7 +61,7 @@ const MonthlySummary = () => {
             textAlign={"right"} 
             fontWeight={"fontWeightBold"}
             sx={{wordBreak: "break-word", fontSize: {xs: ".8rem", sm: "1rem", md: "1.2rem" }} }
-            >30€</Typography>
+            >{expense}€</Typography>
           </CardContent>
         </Card>
       </Grid>
@@ -72,7 +84,7 @@ const MonthlySummary = () => {
             textAlign={"right"} 
             fontWeight={"fontWeightBold"}
             sx={{wordBreak: "break-word", fontSize: {xs: ".8rem", sm: "1rem", md: "1.2rem" }} }
-            >30€</Typography>
+            >{balance}€</Typography>
           </CardContent>
         </Card>
       </Grid>
