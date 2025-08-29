@@ -8,19 +8,44 @@ import {
   Stack,
   TextField,
   Typography,
+  useForkRef,
 } from "@mui/material";
 import React from "react";
-import CloseIcon from "@mui/icons-material/Close"; // 閉じるボタン用のアイコン
-import FastfoodIcon from "@mui/icons-material/Fastfood"; //食事アイコン
+import CloseIcon from "@mui/icons-material/Close";
+import FastfoodIcon from "@mui/icons-material/Fastfood";
+import { Controller, useForm } from "react-hook-form";
+import dayjs, { Dayjs } from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import 'dayjs/locale/es';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+dayjs.extend(customParseFormat);
 
-const TransactionForm = () => {
+interface TransactionFormProps {
+  onCloseForm: () => void,
+  isEntryDrawerOpen: boolean,
+  currentDay: string,
+}
+const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: TransactionFormProps) => {
   const formWidth = 320;
+
+  // For use react hook
+  const { control } = useForm({
+    defaultValues: {
+      type: "expense",
+      date: currentDay,
+      amount: 0,
+      category: "",
+      content: ""
+    }
+  });
+
   return (
     <Box
       sx={{
         position: "fixed",
         top: 64,
-        right: formWidth, // フォームの位置を調整
+        right: isEntryDrawerOpen? formWidth : "-2%", // Form position
         width: formWidth,
         height: "100%",
         bgcolor: "background.paper",
@@ -30,16 +55,18 @@ const TransactionForm = () => {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
           }),
-        p: 2, // 内部の余白
-        boxSizing: "border-box", // ボーダーとパディングをwidthに含める
+        p: 2, // padding 
+        boxSizing: "border-box", // Include borders and padding in the width
         boxShadow: "0px 0px 15px -5px #777777",
       }}
     >
-      {/* 入力エリアヘッダー */}
+
+      {/* Header: Input area */}
       <Box display={"flex"} justifyContent={"space-between"} mb={2}>
         <Typography variant="h6">入力</Typography>
-        {/* 閉じるボタン */}
+        {/* Button: close */}
         <IconButton
+        onClick={onCloseForm}
           sx={{
             color: (theme) => theme.palette.grey[500],
           }}
@@ -47,38 +74,73 @@ const TransactionForm = () => {
           <CloseIcon />
         </IconButton>
       </Box>
-      {/* フォーム要素 */}
+
+      {/* Form */}
       <Box component={"form"}>
         <Stack spacing={2}>
-          {/* 収支切り替えボタン */}
-          <ButtonGroup fullWidth>
-            <Button variant={"contained"} color="error">
-              支出
-            </Button>
-            <Button>収入</Button>
-          </ButtonGroup>
-          {/* 日付 */}
-          <TextField
-            label="日付"
-            type="date"
-            InputLabelProps={{
-              shrink: true,
-            }}
+          {/* Income/Expense switch button */}
+          <Controller
+            name="type"
+            control={control} 
+            render={(field) => (
+              <ButtonGroup fullWidth>
+                <Button variant={"contained"} color="error">
+                  Gasto
+                </Button>
+                <Button>Ingreso</Button>
+              </ButtonGroup>
+            )}
           />
-          {/* カテゴリ */}
-          <TextField id="カテゴリ" label="カテゴリ" select value={"食費"}>
-            <MenuItem value={"食費"}>
-              <ListItemIcon>
-                <FastfoodIcon />
-              </ListItemIcon>
-              食費
-            </MenuItem>
-          </TextField>
-          {/* 金額 */}
-          <TextField label="金額" type="number" />
-          {/* 内容 */}
-          <TextField label="内容" type="text" />
-          {/* 保存ボタン */}
+          {/* Date */}
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
+            <Controller
+              name="date"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <DatePicker
+                  label="date"
+                  format="DD-MM-YYYY"
+                  value={value ? dayjs(value, 'DD-MM-YYYY') : null}
+                  onChange={(newValue: Dayjs | null) => {
+                    onChange(newValue ? newValue.format('DD-MM-YYYY') : '');
+                  }}
+                  slotProps={{ textField: { fullWidth: true } }}
+                />
+              )}
+            />
+          </LocalizationProvider>
+          {/* Category */}
+          <Controller
+            name="category"
+            control={control} 
+            render={({field}) => (
+              <TextField {...field} id="category" label="category" select>
+                <MenuItem value={"食費"}>
+                  <ListItemIcon>
+                    <FastfoodIcon />
+                  </ListItemIcon>
+                  食費
+                </MenuItem>
+              </TextField>
+            )}
+          />
+          {/* Amount */}
+          <Controller 
+            name="amount"
+            control={control}
+            render={({field}) => (
+              <TextField {...field} label="amount" type="number" />
+            )}
+          />
+          {/* Content */}
+          <Controller
+            name="content"
+            control={control}
+            render={({field}) => (
+              <TextField {...field} label="detail" type="text" />
+            )}
+          />
+          {/* Save button */}
           <Button type="submit" variant="contained" color={"primary"} fullWidth>
             保存
           </Button>

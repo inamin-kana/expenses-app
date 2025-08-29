@@ -23,10 +23,11 @@ import IconComponents from "./common/IconComponents";
 
 interface TransactionProps {
   dailyTransactions: Transaction[],
-  currentDay: string
+  currentDay: string,
+  onAddTransactionForm: () => void,
 }
 
-const TransactionMenu = ({dailyTransactions, currentDay}: TransactionProps) => {
+const TransactionMenu = ({dailyTransactions, currentDay, onAddTransactionForm}: TransactionProps) => {
   const menuDrawerWidth = 320;
   return (
     <Drawer
@@ -63,7 +64,11 @@ const TransactionMenu = ({dailyTransactions, currentDay}: TransactionProps) => {
             <Typography variant="body1">Desglose</Typography>
           </Box>
           {/* Right */}
-          <Button startIcon={<AddCircleIcon />} color="primary">
+          <Button 
+            startIcon={<AddCircleIcon />} 
+            color="primary"
+            onClick={onAddTransactionForm}
+            >
             Añadir desglose
           </Button>
         </Box>
