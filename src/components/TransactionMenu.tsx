@@ -37,7 +37,7 @@ const TransactionMenu = ({dailyTransactions, currentDay}: TransactionProps) => {
           boxSizing: "border-box",
           p: 2,
           top: 64,
-          height: `calc(100% - 64px)`, // AppBarの高さを引いたビューポートの高さ
+          height: `calc(100% - 64px)`,
         },
       }}
       variant={"permanent"}
@@ -48,7 +48,7 @@ const TransactionMenu = ({dailyTransactions, currentDay}: TransactionProps) => {
 
         <DailySummary dailyTransactions={dailyTransactions}/>
         
-        {/* 内訳タイトル&内訳追加ボタン */}
+        {/* Desglose title and button */}
         <Box
           sx={{
             display: "flex",
@@ -57,18 +57,18 @@ const TransactionMenu = ({dailyTransactions, currentDay}: TransactionProps) => {
             p: 1,
           }}
           >
-          {/* 左側のメモアイコンとテキスト */}
+          {/* Left */}
           <Box display="flex" alignItems="center">
             <NotesIcon sx={{ mr: 1 }} />
-            <Typography variant="body1">内訳</Typography>
+            <Typography variant="body1">Desglose</Typography>
           </Box>
-          {/* 右側の追加ボタン */}
+          {/* Right */}
           <Button startIcon={<AddCircleIcon />} color="primary">
-            内訳を追加
+            Añadir desglose
           </Button>
         </Box>
 
-        {/* 取引一覧 */}
+        {/* Transaction List */}
         <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
           <List aria-label="取引履歴">
             <Stack spacing={2}>

@@ -14,7 +14,7 @@ const DailySummary = ({ dailyTransactions }: DailySummaryProps) => {
   return (
     <Box>
       <Grid container spacing={2}>
-        {/* 収入 */}
+        {/* Income */}
         <Grid size={6} display={"flex"}>
           <Card
             sx={{ bgcolor: (theme) => theme.palette.grey[100], flexGrow: 1 }}
@@ -24,7 +24,6 @@ const DailySummary = ({ dailyTransactions }: DailySummaryProps) => {
                 Ingreso
               </Typography>
               <Typography
-                // color={(theme) => theme.palette.incomeColor.main}
                 textAlign="right"
                 fontWeight="fontWeightBold"
                 sx={{ wordBreak: "break-all", color: (theme) => theme.palette.incomeColor.main }}
@@ -34,7 +33,7 @@ const DailySummary = ({ dailyTransactions }: DailySummaryProps) => {
             </CardContent>
           </Card>
         </Grid>
-        {/* 支出 */}
+        {/* Expenses */}
         <Grid size={6} display={"flex"}>
           <Card
             sx={{ bgcolor: (theme) => theme.palette.grey[100], flexGrow: 1 }}
@@ -44,7 +43,6 @@ const DailySummary = ({ dailyTransactions }: DailySummaryProps) => {
                 Gasto
               </Typography>
               <Typography
-                // color={(theme) => theme.palette.expenseColor.main}
                 textAlign="right"
                 fontWeight="fontWeightBold"
                 sx={{ wordBreak: "break-all", color: (theme) => theme.palette.expenseColor.main }}
@@ -54,7 +52,7 @@ const DailySummary = ({ dailyTransactions }: DailySummaryProps) => {
             </CardContent>
           </Card>
         </Grid>
-        {/* 残高 */}
+        {/* Balance */}
         <Grid size={12} display={"flex"}>
           <Card
             sx={{ bgcolor: (theme) => theme.palette.grey[100], flexGrow: 1 }}
@@ -64,7 +62,6 @@ const DailySummary = ({ dailyTransactions }: DailySummaryProps) => {
                 Balance
               </Typography>
               <Typography
-                // color={(theme) => theme.palette.balanceColor.main}
                 textAlign="right"
                 fontWeight="fontWeightBold"
                 sx={{ wordBreak: "break-all", color: (theme) => theme.palette.balanceColor.main }}
