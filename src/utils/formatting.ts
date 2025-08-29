@@ -8,9 +8,10 @@ export function formatCurrency(amount: number):string {
   return amount.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })
 }
 
-export const changeDayFormat = (s: string): string => {
-  const m = s.match(/^(\d{2})-(\d{2})-(\d{4})$/);
-  if (!m) return s;               // すでに yyyy-MM-dd などなら触らない
-  const [, dd, mm, yyyy] = m;
+// dd-MM-yyyy → yyyy-MM-dd 
+export const changeDayFormat = (date: string): string => {
+  const changedDate = date.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+  if (!changedDate) return date;
+  const [, dd, mm, yyyy] = changedDate;
   return `${yyyy}-${mm}-${dd}`;
 };
