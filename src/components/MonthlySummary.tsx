@@ -11,7 +11,7 @@ interface MonthlySummaryProps {
 }
 
 const MonthlySummary = ({monthlyTransactions}: MonthlySummaryProps) => {
-  console.log(monthlyTransactions);
+  // console.log(monthlyTransactions);
   
   const {income, expense, balance} = financeCalculations(monthlyTransactions);
   // const monthlyTotals = financeCalculations(monthlyTransactions);
@@ -31,7 +31,7 @@ const MonthlySummary = ({monthlyTransactions}: MonthlySummaryProps) => {
           <CardContent sx={{padding: {xs: 1, sm: 2}}}>
             <Stack direction={"row"}>
               <SouthIcon sx={{ fontSize: "2rem" }}/>
-              <Typography>Income</Typography>
+              <Typography>Ingreso</Typography>
             </Stack>
             <Typography 
             variant="h5" 
@@ -54,7 +54,7 @@ const MonthlySummary = ({monthlyTransactions}: MonthlySummaryProps) => {
           <CardContent sx={{padding: {xs: 1, sm: 2}}}>
             <Stack direction={"row"}>
               <NorthIcon sx={{ fontSize: "2rem" }}/>
-              <Typography>Expenses</Typography>
+              <Typography>Gasto</Typography>
             </Stack>
             <Typography 
             variant="h5" 

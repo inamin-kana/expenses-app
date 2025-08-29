@@ -21,8 +21,8 @@ interface menuItem {
 
 const SideBar = ({drawerWidth, mobileOpen, handleDrawerTransitionEnd, handleDrawerClose}: SidebarProps) => {
   const MenuItem:menuItem[] = [
-    {text: "Home", path: "/", icon: HomeIcon},
-    {text: "Report", path: "/report", icon: EqualizerIcon},
+    {text: "Inicio", path: "/", icon: HomeIcon},
+    {text: "Informe", path: "/report", icon: EqualizerIcon},
   ]
 
   const baseLinkStyle:CSSProperties = {

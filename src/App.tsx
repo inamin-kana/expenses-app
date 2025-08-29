@@ -22,9 +22,9 @@ function App() {
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  console.log(currentMonth);
-  const a = format(currentMonth, "MM-yyyy");
-  console.log(a);
+  // console.log(currentMonth);
+  // const a = format(currentMonth, "MM-yyyy");
+  // console.log(a);
 
   useEffect(() => {
     const fetchTransactions = async() => {
@@ -56,7 +56,7 @@ function App() {
   const monthlyTransactions = transactions.filter((transaction) => {
     return transaction.date.endsWith(formatMonth(currentMonth))
   })
-  console.log(monthlyTransactions);
+  // console.log(monthlyTransactions);
 
   return (
     <ThemeProvider theme={theme}>
@@ -64,7 +64,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<AppLayout />}>
-          <Route index element={<Home monthlyTransactions={monthlyTransactions} />} />
+          <Route index element={<Home monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth}/>} />
           <Route path="report" element={<Report />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
