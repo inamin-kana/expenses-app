@@ -7,12 +7,26 @@ import { DatesSetArg, EventContentArg } from '@fullcalendar/core'
 import { Balance, CalendarContent, Transaction } from '../types'
 import { calculateDailyBalances } from '../utils/financeCalculations'
 import { changeDayFormat, formatCurrency } from '../utils/formatting'
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
+import { format, isSameMonth } from 'date-fns'
+import { useTheme } from '@mui/material'
 
 interface CalenderProps {
   monthlyTransactions: Transaction[],
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
+  currentDay: string,
+  setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
+  today: string,
 }
-const Calendar = ({monthlyTransactions, setCurrentMonth}: CalenderProps) => {
+
+const Calendar = ({
+  monthlyTransactions, 
+  setCurrentMonth, 
+  currentDay,
+  setCurrentDay,
+  today
+}: CalenderProps) => {
+  const theme = useTheme();
   // copy from node_modules -> fullcalendar -> react -> readme
   // const events = [
   //   { title: 'Meeting', start: new Date() },
@@ -83,6 +97,14 @@ const Calendar = ({monthlyTransactions, setCurrentMonth}: CalenderProps) => {
   //   }
   // ]
 
+  const backgroundEvent = {
+    start: changeDayFormat(currentDay),
+    display: "background",
+    backgroundColor: theme.palette.incomeColor.light,
+  }
+
+  // console.log([...calendarEvents, backgroundEvent]);
+
   const renderEventContent = (eventInfo: EventContentArg) => {
     // console.log(eventInfo);
     return(
@@ -101,18 +123,30 @@ const Calendar = ({monthlyTransactions, setCurrentMonth}: CalenderProps) => {
   }
 
   const handleDateSet = (datesetInfo: DatesSetArg) => {
-    console.log(datesetInfo);
-    setCurrentMonth(datesetInfo.view.currentStart)
+    const currentMonth = datesetInfo.view.currentStart;
+    // console.log(currentMonth, "current month");
+    setCurrentMonth(currentMonth);
+    const todayDate = new Date();
+    if(isSameMonth(todayDate, currentMonth)) {
+      setCurrentDay(today);
+    }
+    // console.log(todayDate, "today");
+  }
+
+  const handleDateClick = (dateInfo: DateClickArg) => {
+    console.log(dateInfo);
+    setCurrentDay(format(dateInfo.dateStr, "dd-MM-yyyy"));
   }
 
   return (
     <FullCalendar 
       locale={esLocale}
-      plugins={[dayGridPlugin]}
+      plugins={[dayGridPlugin, interactionPlugin]}
       initialView='dayGridMonth'
-      events={calendarEvents}
+      events={[...calendarEvents, backgroundEvent]}
       eventContent={renderEventContent}
       datesSet={handleDateSet}
+      dateClick={handleDateClick}
     />
   )
 }
