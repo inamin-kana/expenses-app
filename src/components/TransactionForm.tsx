@@ -23,20 +23,24 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import React, { useEffect, JSX, useState } from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
-import { transactionSchema } from "../validations/schema";
-import { Controller, useForm } from "react-hook-form";
+import { Schema, transactionSchema } from "../validations/schema";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import 'dayjs/locale/es';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { IncomeCategory, ExpenseCategory } from "../types";
+import { IncomeCategory, ExpenseCategory, Transaction } from "../types";
 dayjs.extend(customParseFormat);
 
 interface TransactionFormProps {
-  onCloseForm: () => void,
-  isEntryDrawerOpen: boolean,
-  currentDay: string,
+  onCloseForm: () => void;
+  isEntryDrawerOpen: boolean;
+  currentDay: string;
+  onSaveTransaction: (transaction: Schema) => Promise<void>;
+  selectedTransaction: Transaction | null;
+  onDeleteTransaction: (transactionId: string) => Promise<void>;
+  setSelectedTransaction: React.Dispatch<React.SetStateAction<Transaction | null>>;
 }
 
 type IncomeExpense = "income" | "expense";
@@ -46,7 +50,15 @@ interface CategoryItem {
   icon: JSX.Element
 }
 
-const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: TransactionFormProps) => {
+const TransactionForm = ({
+  onCloseForm, 
+  isEntryDrawerOpen, 
+  currentDay, 
+  onSaveTransaction,
+  selectedTransaction,
+  onDeleteTransaction,
+  setSelectedTransaction,
+}: TransactionFormProps) => {
   const formWidth = 320;
 
   const expenseCategories : CategoryItem[] = [
@@ -66,7 +78,14 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
   const [categories, setCategories] = useState(expenseCategories);
 
   // For use react hook
-  const { control, setValue, watch, formState:{errors}, handleSubmit } = useForm({
+  const { 
+    control, 
+    setValue, 
+    watch, 
+    formState:{errors}, 
+    handleSubmit,
+    reset,
+  } = useForm<Schema>({
     defaultValues: {
       type: "expense",
       date: currentDay,
@@ -80,6 +99,7 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
 
   const incomeExpenseToggle = (type: IncomeExpense) => {
     setValue("type", type);
+    setValue("category", "");
   }
 
   // Watch type of income/expense
@@ -96,8 +116,42 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
     setCategories(newCategories);
   }, [currentType])
 
-  const onSubmit = (data: any) => {
-    console.log(data, "ss");
+  const onSubmit:SubmitHandler<Schema> = (data) => {
+    console.log(data);
+    onSaveTransaction(data);
+
+    reset({
+      type: "expense",
+      date: currentDay,
+      amount: 0,
+      category: "",
+      content: "",
+    })
+  }
+
+  useEffect(() => {
+    if(selectedTransaction) {
+      setValue("type", selectedTransaction.type);
+      setValue("date", selectedTransaction.date);
+      setValue("amount", selectedTransaction.amount);
+      setValue("category", selectedTransaction.category);
+      setValue("content", selectedTransaction.content);
+    } else {
+      reset({
+        type: "expense",
+        date: currentDay,
+        amount: 0,
+        category: "",
+        content: "",
+      });
+    }
+  }, [selectedTransaction]);
+
+  const handleDelete = () => {
+    if(selectedTransaction) {
+      onDeleteTransaction(selectedTransaction.id);
+      setSelectedTransaction(null);
+    }
   }
 
   return (
@@ -169,7 +223,7 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
             <Controller
               name="date"
               control={control}
-              render={({ field: { value, onChange } }) => (
+              render={({ field: { value, onChange }, fieldState }) => (
                 <DatePicker
                 label="date"
                 format="DD-MM-YYYY"
@@ -179,7 +233,9 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
                 }}
                 slotProps={{ 
                   textField: { 
-                    fullWidth: true
+                    fullWidth: true,
+                    error: !!fieldState.error,
+                    helperText: fieldState.error?.message,
                   }
                 }}
                 
@@ -253,8 +309,17 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
             variant="contained" 
             color={currentType === "income"? "primary" : "error"} 
             fullWidth>
-            保存
+            SAVE
           </Button>
+          {selectedTransaction && (
+            <Button 
+            onClick={handleDelete}
+              variant="outlined" 
+              color={"secondary"} 
+              fullWidth>
+              DELETE
+            </Button>
+          )}
         </Stack>
       </Box>
     </Box>

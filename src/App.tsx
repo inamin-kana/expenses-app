@@ -9,10 +9,12 @@ import { theme } from './theme/theme';
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import { Transaction } from './types/index';
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import { format } from 'date-fns';
 import { formatMonth } from './utils/formatting';
+import { Schema } from './validations/schema';
+import { doc, deleteDoc } from "firebase/firestore";
 
 function App() {
   // type for judge whether FireStore error or not.
@@ -50,7 +52,6 @@ function App() {
       }
     }
     fetchTransactions();
-
   }, [])
 
   const monthlyTransactions = transactions.filter((transaction) => {
@@ -58,13 +59,65 @@ function App() {
   })
   // console.log(monthlyTransactions);
 
+  // Save transaction data
+  const handleSaveTransaction = async (transaction: Schema) => {
+    console.log(transaction);
+    try {
+      // Save data to firestore
+      const docRef = await addDoc(collection(db, "Transactions"), transaction);
+      // console.log("Document written with ID: ", docRef.id);
+
+      const newTransaction = {
+        id: docRef.id,
+        ...transaction,
+      } as Transaction;
+      // console.log(newTransaction);
+      setTransactions((prevTransaction) => [
+        ...prevTransaction,
+        newTransaction,
+      ])
+    } catch(err) {
+      // error
+      if(isFireStoreError(err)) {
+        console.error("Firebase error: ", err)
+      } else {
+        console.error("General error: ", err)
+      }
+    }
+  };
+
+  const handleDeleteTransaction = async(transactionId: string) => {
+    try {
+      // delete data from Firestore
+      await deleteDoc(doc(db, "Transactions", transactionId));
+      const filteredTransactions = transactions.filter((transaction) => transaction.id !== transactionId);
+      // console.log(filteredTransaction);
+      setTransactions(filteredTransactions);
+    } catch(err) {
+      // error
+      if(isFireStoreError(err)) {
+        console.error("Firebase error: ", err)
+      } else {
+        console.error("General error: ", err)
+      }
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
     <CssBaseline /> {/* reset css in React */}
     <Router>
       <Routes>
         <Route path="/" element={<AppLayout />}>
-          <Route index element={<Home monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth}/>} />
+          <Route index element={
+            <Home 
+              monthlyTransactions={monthlyTransactions} 
+              setCurrentMonth={setCurrentMonth}
+              onSaveTransaction={handleSaveTransaction}
+              onDeleteTransaction={handleDeleteTransaction}
+              />
+            }
+            />
           <Route path="report" element={<Report />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
