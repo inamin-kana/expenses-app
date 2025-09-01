@@ -19,9 +19,11 @@ import TrainIcon from '@mui/icons-material/Train';
 import WorkIcon from '@mui/icons-material/Work';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import SavingsIcon from '@mui/icons-material/Savings';
+import CloseIcon from "@mui/icons-material/Close";
 
 import React, { useEffect, JSX, useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
+import {zodResolver} from "@hookform/resolvers/zod";
+import { transactionSchema } from "../validations/schema";
 import { Controller, useForm } from "react-hook-form";
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -64,15 +66,17 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
   const [categories, setCategories] = useState(expenseCategories);
 
   // For use react hook
-  const { control, setValue, watch } = useForm({
+  const { control, setValue, watch, formState:{errors}, handleSubmit } = useForm({
     defaultValues: {
       type: "expense",
       date: currentDay,
       amount: 0,
       category: "",
       content: ""
-    }
+    },
+    resolver: zodResolver(transactionSchema),
   });
+  console.log(errors);
 
   const incomeExpenseToggle = (type: IncomeExpense) => {
     setValue("type", type);
@@ -91,6 +95,10 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
     // console.log(newCategories);
     setCategories(newCategories);
   }, [currentType])
+
+  const onSubmit = (data: any) => {
+    console.log(data, "ss");
+  }
 
   return (
     <Box
@@ -128,7 +136,7 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
       </Box>
 
       {/* Form */}
-      <Box component={"form"}>
+      <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {/* Income/Expense switch button */}
           <Controller
@@ -163,13 +171,18 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
               control={control}
               render={({ field: { value, onChange } }) => (
                 <DatePicker
-                  label="date"
-                  format="DD-MM-YYYY"
-                  value={value ? dayjs(value, 'DD-MM-YYYY') : null}
-                  onChange={(newValue: Dayjs | null) => {
-                    onChange(newValue ? newValue.format('DD-MM-YYYY') : '');
-                  }}
-                  slotProps={{ textField: { fullWidth: true } }}
+                label="date"
+                format="DD-MM-YYYY"
+                value={value ? dayjs(value, 'DD-MM-YYYY') : null}
+                onChange={(newValue: Dayjs | null) => {
+                  onChange(newValue ? newValue.format('DD-MM-YYYY') : '');
+                }}
+                slotProps={{ 
+                  textField: { 
+                    fullWidth: true
+                  }
+                }}
+                
                 />
               )}
             />
@@ -179,7 +192,14 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
             name="category"
             control={control} 
             render={({field}) => (
-              <TextField {...field} id="category" label="category" select>
+              <TextField 
+                error={!!errors.category}
+                helperText={errors.category?.message}
+                {...field} 
+                id="category" 
+                label="category" 
+                select
+              >
                 {categories.map((category) => (
                   <MenuItem key={category.label} value={category.label}>
                     <ListItemIcon>
@@ -199,6 +219,8 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
               console.log(field);
               return (
               <TextField 
+                error={!!errors.amount}
+                helperText={errors.amount?.message}
                 {...field} 
                 value={field.value === 0 ? "" : field.value}
                 onChange={(e) => {
@@ -216,7 +238,13 @@ const TransactionForm = ({onCloseForm, isEntryDrawerOpen, currentDay}: Transacti
             name="content"
             control={control}
             render={({field}) => (
-              <TextField {...field} label="detail" type="text" />
+              <TextField 
+                error={!!errors.content}
+                helperText={errors.content?.message}
+                {...field} 
+                label="detail" 
+                type="text" 
+              />
             )}
           />
           {/* Save button */}
