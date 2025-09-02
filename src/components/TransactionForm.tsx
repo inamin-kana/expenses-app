@@ -30,6 +30,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import 'dayjs/locale/es';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { esES } from "@mui/x-date-pickers/locales";
 import { IncomeCategory, ExpenseCategory, Transaction } from "../types";
 dayjs.extend(customParseFormat);
 
@@ -247,16 +248,16 @@ const TransactionForm = ({
             }}
           />
           {/* Date */}
-          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
+          {/* <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
             <Controller
               name="date"
               control={control}
               render={({ field: { value, onChange }, fieldState }) => (
-                <DatePicker
+                <DatePicker 
                 label="date"
                 format="DD-MM-YYYY"
                 value={value ? dayjs(value, 'DD-MM-YYYY') : null}
-                onChange={(newValue: Dayjs | null) => {
+                onChange={(newValue, _ctx) => {
                   onChange(newValue ? newValue.format('DD-MM-YYYY') : '');
                 }}
                 slotProps={{ 
@@ -269,6 +270,37 @@ const TransactionForm = ({
                 
                 />
               )}
+            />
+          </LocalizationProvider> */}
+          <LocalizationProvider 
+            dateAdapter={AdapterDayjs} 
+            adapterLocale="es" 
+            localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
+          >
+            <Controller
+              name="date"
+              control={control}
+              render={({ field: { value, onChange }, fieldState }) => {
+                const pickerValue: Dayjs | null = value ? dayjs(value, "DD-MM-YYYY") : null;
+
+                return (
+                  <DatePicker
+                    label="date"
+                    format="DD-MM-YYYY"
+                    value={pickerValue}
+                    onChange={(newValue) => {
+                      onChange(newValue ? dayjs(newValue).format("DD-MM-YYYY") : "");
+                    }}          
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!fieldState.error,
+                        helperText: fieldState.error?.message,
+                      },
+                    }}
+                  />
+                );
+              }}
             />
           </LocalizationProvider>
           {/* Category */}
