@@ -41,6 +41,7 @@ interface TransactionFormProps {
   selectedTransaction: Transaction | null;
   onDeleteTransaction: (transactionId: string) => Promise<void>;
   setSelectedTransaction: React.Dispatch<React.SetStateAction<Transaction | null>>;
+  onUpdateTransaction: (transaction: Schema, transactionId: string) => Promise<void>;
 }
 
 type IncomeExpense = "income" | "expense";
@@ -58,6 +59,7 @@ const TransactionForm = ({
   selectedTransaction,
   onDeleteTransaction,
   setSelectedTransaction,
+  onUpdateTransaction,
 }: TransactionFormProps) => {
   const formWidth = 320;
 
@@ -118,7 +120,24 @@ const TransactionForm = ({
 
   const onSubmit:SubmitHandler<Schema> = (data) => {
     console.log(data);
-    onSaveTransaction(data);
+    if(selectedTransaction) {
+      onUpdateTransaction(data, selectedTransaction.id)
+      .then(() => {
+        console.log("Updated.");
+        setSelectedTransaction(null);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    } else {
+      onSaveTransaction(data)
+      .then(() => {
+        console.log("Saved.");
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+    }
 
     reset({
       type: "expense",
@@ -131,10 +150,19 @@ const TransactionForm = ({
 
   useEffect(() => {
     if(selectedTransaction) {
+      const categoryExists = categories.some(
+        (category) => category.label === selectedTransaction?.category
+      );
+      setValue("category", categoryExists ? selectedTransaction.category : "");
+    }
+  }, [selectedTransaction, categories])
+
+  useEffect(() => {
+    if(selectedTransaction) {
       setValue("type", selectedTransaction.type);
       setValue("date", selectedTransaction.date);
       setValue("amount", selectedTransaction.amount);
-      setValue("category", selectedTransaction.category);
+      // setValue("category", selectedTransaction.category);
       setValue("content", selectedTransaction.content);
     } else {
       reset({
@@ -309,8 +337,9 @@ const TransactionForm = ({
             variant="contained" 
             color={currentType === "income"? "primary" : "error"} 
             fullWidth>
-            SAVE
+              {selectedTransaction ? "ACTUALIZAR" : "SAVE"}
           </Button>
+          {/* Delete button */}
           {selectedTransaction && (
             <Button 
             onClick={handleDelete}

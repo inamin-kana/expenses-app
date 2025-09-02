@@ -9,7 +9,7 @@ import { theme } from './theme/theme';
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import { Transaction } from './types/index';
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { format } from 'date-fns';
 import { formatMonth } from './utils/formatting';
@@ -103,6 +103,29 @@ function App() {
     }
   };
 
+  const handleUpdateTransaction = async(transaction: Schema, transactionId: string) => {
+    try {
+      // update data in Firestore
+      const docRef = doc(db, "Transactions", transactionId);
+
+      // Set the "capital" field of the city 'DC'
+      await updateDoc(docRef, transaction);
+
+      const updatedTransactions = transactions.map((t) => 
+        t.id === transactionId ? {...t, ...transaction} : t
+      ) as Transaction[];
+      console.log(updatedTransactions);
+      setTransactions(updatedTransactions);
+    } catch(err) {
+      // error
+      if(isFireStoreError(err)) {
+        console.error("Firebase error: ", err)
+      } else {
+        console.error("General error: ", err)
+      }
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
     <CssBaseline /> {/* reset css in React */}
@@ -115,6 +138,7 @@ function App() {
               setCurrentMonth={setCurrentMonth}
               onSaveTransaction={handleSaveTransaction}
               onDeleteTransaction={handleDeleteTransaction}
+              onUpdateTransaction={handleUpdateTransaction}
               />
             }
             />
