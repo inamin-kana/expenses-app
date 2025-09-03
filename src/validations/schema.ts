@@ -10,8 +10,8 @@ export const transactionSchema = z.object({
         .max(50, {message: "Máximo 50 letras."}),
     category: 
     z.union([
-        z.enum(["groceries", "daily necessities", "housing expense", "entertainment", "transportation expenses"]),
-        z.enum(["salary", "extra income", "pocket money"]),
+        z.enum(["comida", "productos básicos", "vivienda", "ocio", "transporte"]),
+        z.enum(["sueldo", "ingresos extra", "paga"]),
         z.literal(""),
     ])
     .refine((val) => val !== "", {

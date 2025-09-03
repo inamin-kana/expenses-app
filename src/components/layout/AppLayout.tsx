@@ -52,7 +52,7 @@ export default function AppLayout() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{fontWeight: "fontWeightBold"}}>
-            Kakeibo
+            KAKEIBO
           </Typography>
         </Toolbar>
       </AppBar>

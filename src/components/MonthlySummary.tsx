@@ -30,8 +30,8 @@ const MonthlySummary = ({monthlyTransactions}: MonthlySummaryProps) => {
           }}>
           <CardContent sx={{padding: {xs: 1, sm: 2}}}>
             <Stack direction={"row"}>
-              <SouthIcon sx={{ fontSize: "2rem" }}/>
-              <Typography>Ingreso</Typography>
+              <SouthIcon sx={{ fontSize: "1.8rem" }}/>
+              <Typography sx={{ pl: 1 }}>Ingreso</Typography>
             </Stack>
             <Typography 
             variant="h5" 
@@ -53,8 +53,8 @@ const MonthlySummary = ({monthlyTransactions}: MonthlySummaryProps) => {
           }}>
           <CardContent sx={{padding: {xs: 1, sm: 2}}}>
             <Stack direction={"row"}>
-              <NorthIcon sx={{ fontSize: "2rem" }}/>
-              <Typography>Gasto</Typography>
+              <NorthIcon sx={{ fontSize: "1.8rem" }}/>
+              <Typography sx={{ pl: 1 }}>Gasto</Typography>
             </Stack>
             <Typography 
             variant="h5" 
@@ -76,8 +76,8 @@ const MonthlySummary = ({monthlyTransactions}: MonthlySummaryProps) => {
           }}>
           <CardContent sx={{padding: {xs: 1, sm: 2}}}>
             <Stack direction={"row"}>
-              <AccountBalanceIcon sx={{ fontSize: "2rem" }}/>
-              <Typography>Balance</Typography>
+              <AccountBalanceIcon sx={{ fontSize: "1.8rem" }}/>
+              <Typography sx={{ pl: 1.2 }}>Balance</Typography>
             </Stack>
             <Typography 
             variant="h5" 

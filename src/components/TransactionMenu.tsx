@@ -55,23 +55,24 @@ const TransactionMenu = ({dailyTransactions, currentDay, onAddTransactionForm, o
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center",
-            p: 1,
+            flexDirection: "column",
+            alignItems: "start",
           }}
           >
           {/* Left */}
-          <Box display="flex" alignItems="center">
-            <NotesIcon sx={{ mr: 1 }} />
-            <Typography variant="body1">Desglose</Typography>
-          </Box>
-          {/* Right */}
           <Button 
             startIcon={<AddCircleIcon />} 
             color="primary"
+            sx={{ mb: 1 }}
             onClick={onAddTransactionForm}
             >
-            Añadir desglose
+            Nuevo ingreso / gasto
           </Button>
+          {/* Right */}
+          <Box display="flex" alignItems="center">
+            <NotesIcon sx={{ mr: 1 }} />
+            <Typography variant="body1">Detalles</Typography>
+          </Box>
         </Box>
 
         {/* Transaction List */}

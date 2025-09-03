@@ -1,6 +1,6 @@
 export type TransactionType = "income" | "expense";
-export type IncomeCategory = "salary" | "extra income" | "pocket money";
-export type ExpenseCategory = "groceries" | "daily necessities" | "housing expense" | "entertainment" | "transportation expenses";
+export type IncomeCategory = "sueldo" | "ingresos extra" | "paga";
+export type ExpenseCategory = "comida" | "productos básicos" | "vivienda" | "ocio" | "transporte";
 
 export interface Transaction {
     id: string,

@@ -10,14 +10,14 @@ import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import SavingsIcon from '@mui/icons-material/Savings';
 
 const IconComponents: Record<IncomeCategory | ExpenseCategory, JSX.Element> = {
-  'groceries': <FastfoodIcon fontSize='small'/>,
-  'daily necessities':  <ShoppingBagIcon fontSize='small'/>,
-  'housing expense': <AddHomeIcon fontSize='small'/>,
-  'entertainment':  <SportsTennisIcon fontSize='small'/>,
-  'transportation expenses':  <TrainIcon fontSize='small'/>,
-  'salary': <WorkIcon fontSize='small'/>,
-  'extra income': <AddBusinessIcon fontSize='small'/>,
-  'pocket money': <SavingsIcon fontSize='small'/>,
+  'comida': <FastfoodIcon fontSize='small'/>,
+  'productos básicos':  <ShoppingBagIcon fontSize='small'/>,
+  'vivienda': <AddHomeIcon fontSize='small'/>,
+  'ocio':  <SportsTennisIcon fontSize='small'/>,
+  'transporte':  <TrainIcon fontSize='small'/>,
+  'sueldo': <WorkIcon fontSize='small'/>,
+  'ingresos extra': <AddBusinessIcon fontSize='small'/>,
+  'paga': <SavingsIcon fontSize='small'/>,
 }
 
 export default IconComponents

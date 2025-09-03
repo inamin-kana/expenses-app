@@ -65,17 +65,17 @@ const TransactionForm = ({
   const formWidth = 320;
 
   const expenseCategories : CategoryItem[] = [
-    { label: "groceries", icon:  <FastfoodIcon fontSize='small'/> },
-    { label: "daily necessities", icon:  <ShoppingBagIcon fontSize='small'/> },
-    { label: "housing expense", icon:  <AddHomeIcon fontSize='small'/> },
-    { label: "entertainment", icon:  <SportsTennisIcon fontSize='small'/> },
-    { label: "transportation expenses", icon:  <TrainIcon fontSize='small'/> },
+    { label: "comida", icon:  <FastfoodIcon fontSize='small'/> },
+    { label: "productos básicos", icon:  <ShoppingBagIcon fontSize='small'/> },
+    { label: "vivienda", icon:  <AddHomeIcon fontSize='small'/> },
+    { label: "ocio", icon:  <SportsTennisIcon fontSize='small'/> },
+    { label: "transporte", icon:  <TrainIcon fontSize='small'/> },
   ]
 
   const incomeCategories: CategoryItem[] = [
-    { label: "salary", icon:  <WorkIcon fontSize='small'/> },
-    { label: "extra income", icon:  <AddBusinessIcon fontSize='small'/> },
-    { label: "pocket money", icon:  <SavingsIcon fontSize='small'/> },
+    { label: "sueldo", icon:  <WorkIcon fontSize='small'/> },
+    { label: "ingresos extra", icon:  <AddBusinessIcon fontSize='small'/> },
+    { label: "paga", icon:  <SavingsIcon fontSize='small'/> },
   ]
 
   const [categories, setCategories] = useState(expenseCategories);
@@ -206,7 +206,7 @@ const TransactionForm = ({
 
       {/* Header: Input area */}
       <Box display={"flex"} justifyContent={"space-between"} mb={2}>
-        <Typography variant="h6">入力</Typography>
+        <Typography variant="h6">Formulario de entrada</Typography>
         {/* Button: close */}
         <IconButton
         onClick={onCloseForm}
@@ -369,7 +369,7 @@ const TransactionForm = ({
             variant="contained" 
             color={currentType === "income"? "primary" : "error"} 
             fullWidth>
-              {selectedTransaction ? "ACTUALIZAR" : "SAVE"}
+              {selectedTransaction ? "ACTUALIZAR" : "GUARDAR"}
           </Button>
           {/* Delete button */}
           {selectedTransaction && (
@@ -378,7 +378,7 @@ const TransactionForm = ({
               variant="outlined" 
               color={"secondary"} 
               fullWidth>
-              DELETE
+              BORAR
             </Button>
           )}
         </Stack>
