@@ -27,6 +27,7 @@ function App() {
   // console.log(currentMonth);
   // const a = format(currentMonth, "MM-yyyy");
   // console.log(a);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchTransactions = async() => {
@@ -49,10 +50,15 @@ function App() {
         } else {
           console.error("General error: ", err)
         }
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchTransactions();
-  }, [])
+  }, []);
+
+  console.log(transactions);
+  console.log(isLoading);
 
   const monthlyTransactions = transactions.filter((transaction) => {
     return transaction.date.endsWith(formatMonth(currentMonth))
@@ -147,6 +153,8 @@ function App() {
             element={<Report
               currentMonth={currentMonth}
               setCurrentMonth={setCurrentMonth}
+              monthlyTransactions={monthlyTransactions}
+              isLoading={isLoading}
             />} 
           />
           <Route path="*" element={<NoMatch />} />

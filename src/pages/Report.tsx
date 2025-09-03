@@ -6,17 +6,27 @@ import BarChart from '../components/BarChart'
 import TransactionTable from '../components/TransactionTable'
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { Transaction } from '../types'
+// import { Transaction } from 'firebase/firestore'
 
 interface ReportProps {
   currentMonth: Date;
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
+  monthlyTransactions: Transaction[];
+  isLoading: boolean;
 }
 
-const Report = ({currentMonth, setCurrentMonth}: ReportProps) => {
+const Report = ({
+  currentMonth, 
+  setCurrentMonth, 
+  monthlyTransactions,
+  isLoading,
+}: ReportProps) => {
   const commonPaperStyle = {
-    height: { xs: "auto", md: "400px" },
+    height:  "400px",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    p: 2
   }
 
   return (
@@ -35,7 +45,10 @@ const Report = ({currentMonth, setCurrentMonth}: ReportProps) => {
         </Grid>
         <Grid size={{xs: 12, md: 8}}>
           <Paper sx={commonPaperStyle}>
-            <BarChart />
+            <BarChart 
+              monthlyTransactions={monthlyTransactions}
+              isLoading={isLoading}
+            />
           </Paper>
         </Grid>
         <Grid size={{xs: 12}}>
