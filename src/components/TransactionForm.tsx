@@ -2,9 +2,13 @@ import {
   Box,
   Button,
   ButtonGroup,
+  FormControl,
+  FormHelperText,
   IconButton,
+  InputLabel,
   ListItemIcon,
   MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -308,23 +312,25 @@ const TransactionForm = ({
             name="category"
             control={control} 
             render={({field}) => (
-              <TextField 
-                error={!!errors.category}
-                helperText={errors.category?.message}
-                {...field} 
-                id="category" 
-                label="category" 
-                select
-              >
-                {categories.map((category) => (
-                  <MenuItem key={category.label} value={category.label}>
-                    <ListItemIcon>
-                      {category.icon}
-                    </ListItemIcon>
-                    {category.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <FormControl fullWidth error={!!errors.category}>
+                <InputLabel id="category-select-label">category</InputLabel>
+                <Select
+                  {...field} 
+                  labelId="category-select-label"
+                  id="category-select"
+                  label="category"
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category.label} value={category.label}>
+                      <ListItemIcon>
+                        {category.icon}
+                      </ListItemIcon>
+                      {category.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{errors.category?.message}</FormHelperText>
+              </FormControl>
             )}
           />
           {/* Amount */}
