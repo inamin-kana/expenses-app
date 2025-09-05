@@ -92,11 +92,19 @@ function App() {
     }
   };
 
-  const handleDeleteTransaction = async(transactionId: string) => {
+  const handleDeleteTransaction = async(transactionIds: string | readonly string[]) => {
     try {
+      const idsToDelete = Array.isArray(transactionIds) ? transactionIds : [transactionIds];
+      // console.log(idsToDelete);
       // delete data from Firestore
-      await deleteDoc(doc(db, "Transactions", transactionId));
-      const filteredTransactions = transactions.filter((transaction) => transaction.id !== transactionId);
+
+      for(const id of idsToDelete) {
+        await deleteDoc(doc(db, "Transactions", id));
+      }
+      // const filteredTransactions = transactions.filter((transaction) => transaction.id !== transactionId);
+      const filteredTransactions = transactions.filter(
+        (transaction) => !idsToDelete.includes(transaction.id)
+      );
       // console.log(filteredTransaction);
       setTransactions(filteredTransactions);
     } catch(err) {
@@ -155,6 +163,7 @@ function App() {
               setCurrentMonth={setCurrentMonth}
               monthlyTransactions={monthlyTransactions}
               isLoading={isLoading}
+              onDeleteTransaction={handleDeleteTransaction}
             />} 
           />
           <Route path="*" element={<NoMatch />} />
